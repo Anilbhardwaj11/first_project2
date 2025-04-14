@@ -84,7 +84,7 @@ class _CourseDashboardState extends State<CourseDashboard> {
               context.push('/MyCourses');
               break;
             case 3:
-              context.push('/drawerProfile');
+              context.push('/MyCourses');
               break;
           }
         },
@@ -261,12 +261,13 @@ class _CourseProgressScreenState extends State<CourseProgressScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             buildCounterCard("COMPLETED", completedCount, markAsCompleted,
-                Icons.check_circle, 160),
-            buildCounterCard("MY FAVOURITE", favoriteCount, markAsFavorite,
-                Icons.favorite, 180),
+                Icons.check_circle, MediaQuery.of(context).size.width * 0.4,),
+                // SizedBox(width: 5,),
+            buildCounterCard("FAVOURITES", favoriteCount, markAsFavorite,
+                Icons.favorite, MediaQuery.of(context).size.width * 0.4,),
           ],
         ),
       ],

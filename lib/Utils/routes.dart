@@ -5,9 +5,10 @@ import 'package:first_project/courses/course_name.dart';
 import 'package:first_project/courses/my_courses.dart';
 import 'package:first_project/courses/video_player.dart';
 import 'package:first_project/pages/dashboard_screen.dart';
-import 'package:first_project/pages/login_screen.dart';
+import 'package:first_project/pages/loginPage/login_screen.dart';
 import 'package:first_project/pages/otp_screen.dart';
 import 'package:first_project/pages/profile.dart';
+import 'package:first_project/widgets/models.dart';
 import 'package:first_project/widgets/videoplayerwidgets/lecture_screen.dart';
 import 'package:first_project/widgets/videoplayerwidgets/models.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,14 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/',
+        pageBuilder: (context, state) {
+          return const MaterialPage(
+            child: LoginScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/logout',
         pageBuilder: (context, state) {
           return const MaterialPage(
             child: LoginScreen(),
@@ -58,10 +67,9 @@ class AppRouter {
       ),
       GoRoute(
         path: '/drawerProfile',
-        pageBuilder: (context, state) {
-          return const MaterialPage(
-            child: ProfilePage(),
-          );
+        builder: (context, state) {
+          final user = state.extra as UserModel;
+          return ProfilePage(user: user);
         },
       ),
       // bottom Naviagtion Bar
@@ -109,7 +117,7 @@ class AppRouter {
         path: '/playedvideo',
         pageBuilder: (context, state) {
           return const MaterialPage(
-            child:CourseVideoPage(),
+            child: CourseVideoPage(),
           );
         },
       ),
@@ -117,7 +125,7 @@ class AppRouter {
         path: '/courseDetails',
         pageBuilder: (context, state) {
           return const MaterialPage(
-            child:CourseDetailsScreen(),
+            child: CourseDetailsScreen(),
           );
         },
       ),

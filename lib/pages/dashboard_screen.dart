@@ -1,7 +1,7 @@
 import 'package:first_project/Utils/dynamic_size.dart';
 import 'package:first_project/widgets/models.dart';
 import 'package:flutter/material.dart';
-import 'package:first_project/pages/account_screen.dart';
+import 'package:first_project/pages/SignupPage/account_screen.dart';
 import 'package:first_project/pages/drawer_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +14,13 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
+  
+  // Initialize the user variable with default values
+  final UserModel user = UserModel(
+    name: 'Hrithik',
+    email: 'ahgjhhjbdjhbgds@gmail.com',
+    profileImageUrl: 'https://assets.mypandit.com/wp-content/uploads/2025/01/Hrithik_Roshan.webp',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -40,26 +47,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      drawer: MyDrawer(
-        user: UserModel(
-          name: 'Ananya',
-          email: 'ananya@gmail.com',
-          profileImageUrl:
-              'https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?90af0c8',
-        ),
-      ),
-      body: const SingleChildScrollView(
+      drawer: MyDrawer(user: user),
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            _GreetingSection(userName: "Ananya"),
-            SizedBox(height: 20),
-            _AddBanner(),
-            _LastPurchasedSection(),
-            SizedBox(height: 8),
-            _UpcomingClasses(),
-            _PromotionalItems(),
-            _Transactions(),
-            _SellingCourses(),
+            _GreetingSection(userName: user.name),
+            const SizedBox(height: 10),
+            const _AddBanner(),
+            const _LastPurchasedSection(),
+            const SizedBox(height: 8),
+            const _UpcomingClasses(),
+            const _PromotionalItems(),
+            const _Transactions(),
+            const _SellingCourses(),
           ],
         ),
       ),
@@ -82,7 +82,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               context.push('/MyCourses');
               break;
             case 3:
-              context.push('/drawerProfile');
+              context.push('/drawerProfile', extra: user);
               break;
           }
         },
@@ -90,7 +90,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
-
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
@@ -203,7 +202,7 @@ class _GreetingSection extends StatelessWidget {
           ),
           CircleAvatar(
             radius: size.avatarRadius(0.08),
-            backgroundImage: const AssetImage("assets/images/Ananya.jpg"),
+            backgroundImage: const AssetImage("assets/images/panil.jpeg"),
           ),
         ],
       ),

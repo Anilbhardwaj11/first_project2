@@ -52,70 +52,73 @@ class MyDrawer extends StatelessWidget {
                           backgroundImage: NetworkImage(user.profileImageUrl),
                         ),
                         SizedBox(width: sizes.sizedBoxWidth(0.04)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user.name,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: sizes.fontSize(0.045),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(height: sizes.sizedBoxHeight(0.005)),
-                            Text(
-                              user.email,
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: sizes.fontSize(0.035),
-                              ),
-                            ),
-                            SizedBox(height: sizes.sizedBoxHeight(0.01)),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ProfilePage()),
-                                );
-                              },
-                              child: Container(
-                                width: sizes.containerWidth(0.3),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: sizes.containerHeight(0.012),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user.name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: sizes.fontSize(0.045),
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[400],
-                                  borderRadius: BorderRadius.circular(4),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: sizes.sizedBoxHeight(0.005)),
+                              Text(
+                                user.email,
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: sizes.fontSize(0.035),
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    'Edit Profile',
-                                    style: TextStyle(
-                                      fontSize: sizes.fontSize(0.035),
-                                      fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                softWrap: false,
+                              ),
+                              SizedBox(height: sizes.sizedBoxHeight(0.01)),
+                              InkWell(
+                                onTap: () {
+                                  context.push('/drawerProfile', extra: user);
+                                },
+                                child: Container(
+                                  width: sizes.containerWidth(0.3),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: sizes.containerHeight(0.012),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[400],
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Edit Profile',
+                                      style: TextStyle(
+                                        fontSize: sizes.fontSize(0.035),
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(height: sizes.sizedBoxHeight(0.02)),
                     _buildDrawerItem(context, sizes, Icons.person, 'My Profile',
                         () {
-                      context.push('/drawerProfile');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProfilePage(user: user),
+                        ),
+                      );
                     }),
                     _buildDrawerItem(context, sizes, Icons.book, 'My Learnings',
                         () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const ProfilePage()));
+                      context.push('/drawerProfile', extra: user);
                     }),
                     _buildDrawerItem(
                         context, sizes, Icons.dashboard, 'Course Dashboard',
@@ -124,10 +127,7 @@ class MyDrawer extends StatelessWidget {
                     }),
                     _buildDrawerItem(context, sizes, Icons.quiz, 'Test & Quiz',
                         () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const ProfilePage()));
+                      context.push('/Dashboard');
                     }),
                     _buildDrawerItem(
                         context, sizes, Icons.language, 'Language', () {}),
@@ -163,8 +163,7 @@ class MyDrawer extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
-                                Navigator.pushReplacementNamed(
-                                    context, '/login');
+                                context.go('/logout');
                               },
                               child: const Text('Logout'),
                             ),
@@ -185,13 +184,16 @@ class MyDrawer extends StatelessWidget {
   Widget _buildDrawerItem(BuildContext context, AppSizes sizes, IconData icon,
       String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon,
-          color: Colors.white, size: sizes.iconSize(0.06)), // ~24 on width 400
+      leading: Icon(
+        icon,
+        color: Colors.white,
+        size: sizes.iconSize(0.06),
+      ),
       title: Text(
         title,
         style: TextStyle(
           color: Colors.white,
-          fontSize: sizes.fontSize(0.04), // ~16 on width 400
+          fontSize: sizes.fontSize(0.04),
         ),
       ),
       onTap: onTap,

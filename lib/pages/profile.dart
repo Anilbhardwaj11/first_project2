@@ -1,8 +1,11 @@
 import 'package:first_project/Utils/dynamic_size.dart';
+import 'package:first_project/widgets/models.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final UserModel? user;
+  
+  const ProfilePage({super.key, this.user});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -10,9 +13,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool isEditing = false;
-
-  final TextEditingController nameController = TextEditingController(text: "Ananya Pandey");
-  final TextEditingController emailController = TextEditingController(text: "ananya@gmail.com");
+  late TextEditingController nameController;
+  late TextEditingController emailController;
   final TextEditingController mobileController = TextEditingController(text: "8989874679");
   final TextEditingController courseController = TextEditingController(text: "12th CBSE");
   final TextEditingController regNoController = TextEditingController(text: "kjbdkjhbd");
@@ -21,6 +23,29 @@ class _ProfilePageState extends State<ProfilePage> {
   final int attended = 190;
   final int pending = 320;
   final int total = 190;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with user data if available, otherwise use default values
+    nameController = TextEditingController(
+      text: widget.user?.name ?? "Ananya Pandey"
+    );
+    emailController = TextEditingController(
+      text: widget.user?.email ?? "ananya@gmail.com"
+    );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    mobileController.dispose();
+    courseController.dispose();
+    regNoController.dispose();
+    regDateController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +61,11 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: sizes.sizedBoxHeight(0.005)),
               const CustomDivider(),
               SizedBox(height: sizes.sizedBoxHeight(0.02)),
-              ProfileInfo(name: nameController.text, course: courseController.text),
+              ProfileInfo(
+                name: nameController.text, 
+                course: courseController.text,
+                profileImageUrl: widget.user?.profileImageUrl,
+              ),
               SizedBox(height: sizes.sizedBoxHeight(0.01)),
               const CustomDivider(),
               SizedBox(height: sizes.sizedBoxHeight(0.006)),
@@ -204,8 +233,14 @@ class CustomDivider extends StatelessWidget {
 class ProfileInfo extends StatelessWidget {
   final String name;
   final String course;
+  final String? profileImageUrl;
 
-  const ProfileInfo({super.key, required this.name, required this.course});
+  const ProfileInfo({
+    super.key, 
+    required this.name, 
+    required this.course,
+    this.profileImageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +251,7 @@ class ProfileInfo extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ProfileAvatar(sizes: sizes),
+          ProfileAvatar(sizes: sizes, profileImageUrl: profileImageUrl),
           SizedBox(width: sizes.sizedBoxWidth(0.07)),
           Expanded(
             child: Column(
@@ -248,15 +283,22 @@ class ProfileInfo extends StatelessWidget {
 
 class ProfileAvatar extends StatelessWidget {
   final AppSizes sizes;
+  final String? profileImageUrl;
 
-  const ProfileAvatar({super.key, required this.sizes});
+  const ProfileAvatar({
+    super.key, 
+    required this.sizes,
+    this.profileImageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: sizes.avatarRadius(0.12),
       backgroundColor: Colors.grey[300],
-      backgroundImage: const AssetImage("assets/images/Ananya.jpg"),
+      backgroundImage: profileImageUrl != null 
+          ? NetworkImage(profileImageUrl!)
+          : const AssetImage("assets/images/Ananya.jpg") as ImageProvider,
     );
   }
 }
